@@ -4,7 +4,6 @@ such as the location to store files, etc.
 
 The configuration is composed from different sources in a
 hierarchical fashion:
-    * The defaults hard-coded in this file.
     * If it exists: the credentials.cfg file in the directory
       of this module
     * If it exists: the credentials.cfg file in the 'current'
@@ -32,7 +31,6 @@ class Config(SafeConfigParser):
 
     def __init__(self, configfile=None):
         SafeConfigParser.__init__(self)
-        self.__add_defaults()
         configfiles = []
         # Add the filename for the config file in the modules
         # directory
@@ -45,11 +43,3 @@ class Config(SafeConfigParser):
         if configfile:
             configfiles.append(configfile)
         self.read(configfiles)
-
-    def __add_defaults(self):
-        self.add_section('sql')
-        self.set('sql', 'server', 'localhost')
-        self.set('sql', 'port', '1433')
-        self.set('sql', 'user', 'fluksotableau')
-        self.set('sql', 'password', 'CHANGE ME IN AN CREDENTIALS.CFG FILE')
-        self.set('sql', 'database', 'test_db')

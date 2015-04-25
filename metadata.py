@@ -1,5 +1,7 @@
 import config
 import gspread
+import json
+from oauth2client.client import SignedJwtAssertionCredentials
 from flukso import Flukso
 from fluksosensor import Sensor
 
@@ -16,12 +18,15 @@ def get_Fluksos():
         array of Flukso objects
     """
     #fetch Google credentials
-    guser = c.get('metadata','user')
-    gpassword = c.get('metadata','password')
+    gjson = c.get('metadata','json')
     gfile = c.get('metadata','file')
+    json_key = json.load(open(gjson))
+    scope = ['https://spreadsheets.google.com/feeds']
+    credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'], scope)
 
     #login to Google and fetch spreadsheet
-    gc = gspread.login(guser, gpassword)
+    gc = gspread.authorize(credentials)
+    gc.login()
     sheet = gc.open(gfile).sheet1
     cellvalues = sheet.get_all_values()
 

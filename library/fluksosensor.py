@@ -46,27 +46,7 @@ class Sensor(object):
         -------
         bool
       """
-      if self.is_erroneous(tmpos,head) or tmpos.series(self.sensor_id,head=head).dropna().empty:
+      if tmpos.series(self.sensor_id,head=head).dropna().empty:
         return False
       else:
         return True
-
-    def is_erroneous(self,tmpos,head=0):
-      """
-        Check if the tmpo data fetch throws errors
-
-        Parameters
-        ----------
-        tmpos: tmpo session
-        head: Pandas Timestamp
-
-        Returns
-        -------
-        bool
-      """
-      try:
-        tmpos.series(self.sensor_id,head)
-      except IndexError:
-        return True
-      else:
-        return False

@@ -17,11 +17,11 @@ class Sensor(object):
         function: string
         parent: (default None) Flukso
       """
-        self.parent = parent
-        self.sensor_id = sensor_id
-        self.token = token
-        self.sensortype = sensortype
-        self.function = function
+      self.parent = parent
+      self.sensor_id = sensor_id
+      self.token = token
+      self.sensortype = sensortype
+      self.function = function
 
     def set_parent(self,flukso):
       """

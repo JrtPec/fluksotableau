@@ -163,6 +163,17 @@ class QueryHelper(object):
                 DROP TABLE "{table:s}"
                 """.format(table=name)
         self.cursor.execute(query)
+
+    def flukso_drop_table(self,flukso):
+        """
+            Drops a table from a flukso
+
+            Parameters
+            ----------
+            flukso: Flukso
+        """
+        name = self._get_tablename(flukso)
+        self.drop_table(name)
         
     def set_values(self,flukso,df):
         """

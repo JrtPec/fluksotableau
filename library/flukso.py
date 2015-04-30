@@ -1,3 +1,5 @@
+import pandas as pd
+
 class Flukso(object):
     """
         Object to contain a Fluksometer, its metadata and all its sensors
@@ -52,7 +54,7 @@ class Flukso(object):
 
         self.sensors = res
 
-    def fetch_tmpo(self,tmpos,head=0):
+    def fetch_tmpo(self,tmpos,head=0,localize=True,timezone='Europe/Brussels'):
         """
             Fetch data for this fluksometer
 
@@ -71,7 +73,11 @@ class Flukso(object):
 
         df = tmpos.dataframe(sensor_ids,head=head)
         df = self.diff_interp(df)
-        df.index.tz = None
+        if localize is True:
+            df = df.tz_convert(timezone)
+            df.index = pd.DatetimeIndex([i.replace(tzinfo=None) for i in df.index])
+        else:
+            df.index.tz = None
         return df.dropna()
 
     def diff_interp(self,ts):

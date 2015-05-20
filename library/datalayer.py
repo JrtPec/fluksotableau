@@ -34,7 +34,7 @@ class DataLayer(object):
         df = self.tmpos.dataframe(sensor_ids,head=head)
         df = self.diff_interp(df)
         if localize is True:
-            self.localize(df,timezone)
+            df = self.localize(df,timezone)
         else:
             df.index.tz = None
         return df.dropna()
@@ -58,7 +58,7 @@ class DataLayer(object):
         ts = self.tmpos.series(sensor_id,head=head)
         ts = self.diff_interp(ts)
         if localize is True:
-            self.localize(ts,timezone)
+            ts = self.localize(ts,timezone)
         else:
             ts.index.tz = None
         return ts.dropna()
@@ -101,6 +101,7 @@ class DataLayer(object):
 
         temp = ts.tz_convert(timezone)
         temp.index = pd.DatetimeIndex([i.replace(tzinfo=None) for i in temp.index])
+        return temp
 
     def tmpo_has_data(self, sensor_id, head=0):
         """

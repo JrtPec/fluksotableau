@@ -27,13 +27,6 @@ fluksos = metadata.get_Fluksos()
 print ", tmpo data\n"
 tmpos = tmpo.Session()
 
-#add sensors and sync
-for f in fluksos:
-    for s in f.sensors:
-        tmpos.add(s.sensor_id,s.token)
-tmpos.sync()
-
-
 hours = 24 #interval in which to search for new data
 head = pd.Timestamp(time.time() - 60*60*hours, unit='s')
 

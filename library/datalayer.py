@@ -32,6 +32,7 @@ class DataLayer(object):
             Pandas DataFrame without timezone info
         """
         df = self.tmpos.dataframe(sensor_ids,head=head)
+        if df.dropna().empty: return None
         df = self.diff_interp(df)
         if localize is True:
             df = self.localize(df,timezone)
@@ -56,6 +57,7 @@ class DataLayer(object):
         """
 
         ts = self.tmpos.series(sensor_id,head=head)
+        if ts.dropna().empty: return None
         ts = self.diff_interp(ts)
         if localize is True:
             ts = self.localize(ts,timezone)

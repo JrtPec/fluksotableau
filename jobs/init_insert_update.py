@@ -6,7 +6,7 @@ import pandas as pd
 script_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.append(os.path.join(script_dir, os.pardir, os.pardir))
 
-from fluksotableau.library import config, metadata, queryhelper
+from fluksotableau.library import config, metadata, queryhelper, datalayer
 c = config.Config()
 
 sys.path.append(c.get('tmpo','folder'))
@@ -26,13 +26,15 @@ print ", metadata",
 fluksos = metadata.get_Fluksos()
 print ", tmpo data\n"
 tmpos = tmpo.Session()
+dl = datalayer.DataLayer(tmpos)
+
 
 hours = 24 #interval in which to search for new data
 head = pd.Timestamp(time.time() - 60*60*hours, unit='s')
 
 for f in fluksos:
     print f.flukso_id,len(f.sensors),'sensors',
-    f.filter_empty_sensors(tmpos)
+    f.filter_empty_sensors(dl)
     print len(f.sensors),'after filter'
     if len(f.sensors) == 0: continue
         
@@ -41,14 +43,14 @@ for f in fluksos:
         print 'Init',
         QH.init_table(f)
         print 'data fetch'
-        df = f.fetch_tmpo(tmpos)
+        df = f.fetch_tmpo(dl)
         print df.size,'datapoints'
         QH.set_values(f,df)
     else:
         print 'Update'
-        f.filter_empty_sensors(tmpos,head=head)
+        f.filter_empty_sensors(dl,head=head)
         print len(f.sensors),'sensors after filter, data fetch'
-        df = f.fetch_tmpo(tmpos,head=head)
+        df = f.fetch_tmpo(dl,head=head)
         if df is None:
             print "no data"
             continue

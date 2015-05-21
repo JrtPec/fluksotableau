@@ -3,7 +3,7 @@ class Sensor(object):
         Class to contain a fluksosensor,
         its metadata, and methods to fetch its data
     """
-    def __init__(self,sensor_id,token,sensortype,function,parent=None):
+    def __init__(self,sensor_id,token,sensortype,function=None,parent=None):
       """
         Init Sensor
 

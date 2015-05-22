@@ -4,7 +4,8 @@ import pandas as pd
 script_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.append(os.path.join(script_dir, os.pardir, os.pardir))
 
-from fluksotableau.library import config, metadata2, datalayer
+from fluksotableau.library import config, datalayer
+from fluksotableau.library import metadata2 as md
 c = config.Config()
 
 path_to_data = c.get('data', 'folder')
@@ -14,8 +15,8 @@ if not os.path.exists(path_to_data):
 sys.path.append(c.get('tmpo','folder'))
 import tmpo
 
-MD = metadata2.Metadata()
-fluksos = MD.fluksos
+metadata = md.Metadata()
+fluksos = metadata.fluksos
 tmpos = tmpo.Session()
 dl = datalayer.DataLayer(tmpos)
 

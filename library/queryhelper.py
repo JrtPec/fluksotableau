@@ -229,9 +229,13 @@ class QueryHelper(object):
             -------
             string
         """
+        '''
         return "{name:s}_{type:s}_{function:s}".format(name=sensor.parent.address,
                                                        type=sensor.sensortype,
                                                        function=sensor.function)
+        '''
+        return "{name:s}_{type:s}".format(name=sensor.parent.address,
+            type=sensor.sensortype)        
     
     def _get_tablename(self,flukso):
         """

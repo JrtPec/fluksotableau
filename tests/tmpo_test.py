@@ -4,7 +4,8 @@ import sys, os, inspect
 script_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.append(os.path.join(script_dir, os.pardir, os.pardir))
 
-from fluksotableau.library import config, metadata
+from fluksotableau.library import config
+from fluksotableau.library import metadata2 as md
 c = config.Config()
 
 sys.path.append(c.get('tmpo','folder'))
@@ -14,7 +15,8 @@ print "Init tmpo"
 tmpos = tmpo.Session()
 
 print "Fetching Metadata..."
-fluksos = metadata.get_Fluksos()
+metadata = md.Metadata()
+fluksos = metadata.fluksos
 
 print "Adding sensors to tmpo"
 for f in fluksos:
@@ -28,7 +30,7 @@ print "RESULTS:"
 for f in fluksos:
     print f.flukso_id,f.address
     for s in f.sensors:
-        print "\t",s.sensor_id,s.sensortype, s.function
+        print "\t",s.sensor_id,s.sensortype
         try:
             ts = tmpos.series(s.sensor_id)
         except IndexError,e:

@@ -6,7 +6,8 @@ import pandas as pd
 script_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.append(os.path.join(script_dir, os.pardir, os.pardir))
 
-from fluksotableau.library import config, metadata, queryhelper, datalayer
+from fluksotableau.library import config, queryhelper, datalayer
+from fluksotableau.library import metadata2 as md
 c = config.Config()
 
 sys.path.append(c.get('tmpo','folder'))
@@ -23,7 +24,8 @@ port = c.get('sql','port')
 print ", server connection",
 QH = queryhelper.QueryHelper(server,user,password,database,port)
 print ", metadata",
-fluksos = metadata.get_Fluksos()
+metadata = md.Metadata()
+fluksos = metadata.fluksos
 print ", tmpo data\n"
 tmpos = tmpo.Session()
 dl = datalayer.DataLayer(tmpos)

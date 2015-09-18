@@ -20,7 +20,6 @@ fluksos = metadata.fluksos
 tmpos = tmpo.Session()
 dl = datalayer.DataLayer(tmpos)
 
-res = []
 for f in fluksos:
     for s in f.sensors:
         ts = dl.tmpo_dataframe([s.sensor_id], head = pd.Timestamp('now').normalize() - pd.Timedelta(days=7))
@@ -29,8 +28,3 @@ for f in fluksos:
         ts['meterID'] = s.sensor_id
         for group in ts.groupby(ts.index.day):
         	group[1].to_csv(os.path.join(path_to_data, "{}.{}.csv".format(s.sensor_id,group[1].first_valid_index().date())))
-"""
-        res.append(ts)
-s = pd.concat(res)
-s.to_csv(os.path.join(path_to_data,"{name:s}.csv".format(name=c.get('csv_filename','1min'))))
-"""

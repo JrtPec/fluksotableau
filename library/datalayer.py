@@ -16,7 +16,7 @@ class DataLayer(object):
 
         self.tmpos = tmpos
 
-    def tmpo_dataframe(self,sensor_ids,head=0,localize=True,timezone='Europe/Brussels'):
+    def tmpo_dataframe(self,sensor_ids,head=0, tail=2147483647,localize=True,timezone='Europe/Brussels'):
         """
             Fetch dataframe from tmpo
 
@@ -31,7 +31,7 @@ class DataLayer(object):
             -------
             Pandas DataFrame without timezone info
         """
-        df = self.tmpos.dataframe(sensor_ids,head=head)
+        df = self.tmpos.dataframe(sensor_ids,head=head,tail=tail)
         if df.dropna().empty: return None
         df = self.diff_interp(df)
         if df.dropna().empty: return None

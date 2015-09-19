@@ -1,4 +1,5 @@
 import pandas as pd
+import math
 
 class DataLayer(object):
     """
@@ -16,6 +17,43 @@ class DataLayer(object):
 
         self.tmpos = tmpos
 
+    def _start_date(self, sid):
+        """
+            Queries tempo for the date of the first blok for this sensor
+
+            Parameters
+            ----------
+            sid: String
+                sensor id
+
+            Returns
+            -------
+            epoch
+        """
+
+        return int(self.tmpos.list(sid)[0][0][5])
+
+    def _2epochs(self, time):
+        """
+            Converts pandas timestamp to epoch
+
+            Parameters
+            ----------
+            time: timestamp
+
+            Returns
+            -------
+            epoch
+        """
+
+        if isinstance(time, pd.tslib.Timestamp):
+            return int(math.floor(time.value / 1e9))
+        elif isinstance(time, int):
+            return time
+        else:
+            raise NotImplementedError("Time format not supported. " +
+                                      "Use epochs or a Pandas timestamp.")
+
     def tmpo_dataframe(self,sensor_ids,head=0, tail=2147483647,localize=True,timezone='Europe/Brussels'):
         """
             Fetch dataframe from tmpo
@@ -31,6 +69,7 @@ class DataLayer(object):
             -------
             Pandas DataFrame without timezone info
         """
+
         df = self.tmpos.dataframe(sensor_ids,head=head,tail=tail)
         if df.dropna().empty: return None
         df = self.diff_interp(df)
@@ -41,7 +80,7 @@ class DataLayer(object):
             df.index.tz = None
         return df.dropna()
 
-    def tmpo_series(self,sensor_id,head=0,localize=True,timezone='Europe/Brussels'):
+    def tmpo_series(self,sensor_id,head=0, tail=2147483647, localize=True,timezone='Europe/Brussels'):
         """
             Fetch series from tmpo
 
@@ -57,7 +96,14 @@ class DataLayer(object):
             Pandas series without timezone info
         """
 
-        ts = self.tmpos.series(sensor_id,head=head)
+        start_date = self._start_date(sensor_id)
+
+        if self._2epochs(head) < start_date and self._2epochs(tail) < start_date:
+            return None
+        elif self._2epochs(head) < start_date:
+            head = start_date
+
+        ts = self.tmpos.series(sensor_id,head=head, tail=tail)
         if ts.dropna().empty: return None
         ts = self.diff_interp(ts)
         if ts.dropna().empty: return None

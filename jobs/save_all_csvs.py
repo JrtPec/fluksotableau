@@ -44,15 +44,21 @@ weekset = _weekset(start=dt.date(year=2015,month=4,day=1), end=dt.date.today())
 weekindex = pd.DatetimeIndex(weekset)
 
 for i, f in enumerate(fluksos):
-    print "Flukso {} of {}".format(i, len(fluksos))
+    print "Flukso {} of {}".format(i+1, len(fluksos))
     for j, s in enumerate(f.sensors):
-        print "Sensor {} of {}".format(j, len(f.sensors))
+        print "Sensor {} of {}".format(j+1, len(f.sensors))
         for week in weekindex:
-            ts = dl.tmpo_dataframe([s.sensor_id], head=week, tail= week + pd.Timedelta(days=7))
-            if ts is None: continue
+            print "week {}, fetching data".format(week),
+            ts = dl.tmpo_series(s.sensor_id, head=week, tail= week + pd.Timedelta(days=7))
+            if ts is None:
+                print "No data"
+                continue
+            print "success"
+            ts = pd.concat([ts], axis=1)
             ts.columns = ['consumption']
             ts['meterID'] = s.sensor_id
 
             for group in ts.groupby(ts.index.day):
                 group[1].to_csv(os.path.join(path_to_data, "{}.{}.csv".format(s.sensor_id,group[1].first_valid_index().date())))
                 print ".",
+            print "week done"

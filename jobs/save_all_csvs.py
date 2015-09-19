@@ -43,8 +43,10 @@ def _weekset(start, end):
 weekset = _weekset(start=dt.date(year=2015,month=4,day=1), end=dt.date.today())
 weekindex = pd.DatetimeIndex(weekset)
 
-for f in fluksos:
-    for s in f.sensors:
+for i, f in enumerate(fluksos):
+    print "Flukso {} of {}".format(i, len(fluksos))
+    for j, s in enumerate(f.sensors):
+        print "Sensor {} of {}".format(j, len(f.sensors))
         for week in weekindex:
             ts = dl.tmpo_dataframe([s.sensor_id], head=week, tail= week + pd.Timedelta(days=7))
             if ts is None: continue

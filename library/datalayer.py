@@ -31,7 +31,10 @@ class DataLayer(object):
             epoch
         """
 
-        return int(self.tmpos.list(sid)[0][0][5])
+        try:
+            return int(self.tmpos.list(sid)[0][0][5])
+        except IndexError:
+            return None
 
     def _2epochs(self, time):
         """
@@ -97,6 +100,8 @@ class DataLayer(object):
         """
 
         start_date = self._start_date(sensor_id)
+        if start_date is None:
+            return None
 
         if self._2epochs(head) < start_date and self._2epochs(tail) < start_date:
             return None

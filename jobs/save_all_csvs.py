@@ -53,3 +53,4 @@ for f in fluksos:
 
             for group in ts.groupby(ts.index.day):
                 group[1].to_csv(os.path.join(path_to_data, "{}.{}.csv".format(s.sensor_id,group[1].first_valid_index().date())))
+                print ".",

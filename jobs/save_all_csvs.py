@@ -20,7 +20,7 @@ import tmpo
 metadata = md.Metadata()
 fluksos = metadata.fluksos
 
-try
+try:
     tmpos = tmpo.Session(path = c.get('tmpo','path'))
 except:
     tmpos = tmpo.Session()

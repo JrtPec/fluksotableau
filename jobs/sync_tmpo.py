@@ -13,7 +13,10 @@ import tmpo
 metadata = md.Metadata()
 fluksos = metadata.fluksos
 
-tmpos = tmpo.Session()
+try
+	tmpos = tmpo.Session(path = c.get('tmpo','path'))
+except:
+	tmpos = tmpo.Session()
 
 #add sensors and sync
 

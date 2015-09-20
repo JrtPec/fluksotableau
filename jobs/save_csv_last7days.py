@@ -17,7 +17,12 @@ import tmpo
 
 metadata = md.Metadata()
 fluksos = metadata.fluksos
-tmpos = tmpo.Session()
+
+try
+	tmpos = tmpo.Session(path = c.get('tmpo','path'))
+except:
+	tmpos = tmpo.Session()
+
 dl = datalayer.DataLayer(tmpos)
 
 for f in fluksos:

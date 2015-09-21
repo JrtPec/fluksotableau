@@ -70,6 +70,7 @@ for i, f in enumerate(fluksos):
 
                 if os.path.isfile(os.path.join(path_to_data,filename)) and (filecmp.cmp('temp.csv', os.path.join(path_to_data, filename))):
                     print "file already exists, not saving",
+                    continue
                 else:
                     print "saving new file",
                 group[1].to_csv(os.path.join(path_to_data, filename))

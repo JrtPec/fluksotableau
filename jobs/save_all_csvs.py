@@ -64,6 +64,15 @@ for i, f in enumerate(fluksos):
             ts['meterID'] = s.sensor_id
 
             for group in ts.groupby(ts.index.day):
-                group[1].to_csv(os.path.join(path_to_data, "{}.{}.csv".format(s.sensor_id,group[1].first_valid_index().date())))
+                filename = "{}.{}.csv".format(s.sensor_id,group[1].first_valid_index().date())
+                #save file locally
+                group[1].to_csv('temp.csv')
+
+                if os.path.isfile(os.path.join(path_to_data,filename)) and (filecmp.cmp('temp.csv', os.path.join(path_to_data, filename))):
+                    print "file already exists, not saving",
+                else:
+                    print "saving new file",
+                group[1].to_csv(os.path.join(path_to_data, filename))
+
                 print ".",
             print "week done"

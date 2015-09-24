@@ -14,14 +14,16 @@ metadata = md.Metadata()
 fluksos = metadata.fluksos
 
 try:
-	tmpos = tmpo.Session(path = c.get('tmpo','path'))
+    tmpos = tmpo.Session(path = c.get('tmpo','path'))
 except:
-	tmpos = tmpo.Session()
+    tmpos = tmpo.Session()
 
 #add sensors and sync
-
 for f in fluksos:
-	for s in f.sensors:
-		tmpos.add(s.sensor_id,s.token)
-
-tmpos.sync()
+    for s in f.sensors:
+        tmpos.add(s.sensor_id,s.token)
+        try:
+            tmpos.sync(s.sensor_id)
+        except:
+            m = "sync failed for sensor {}".format(s.sensor_id)
+            config.log(path = c.get('data','folder'), message = m)

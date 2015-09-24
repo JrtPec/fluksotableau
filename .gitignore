@@ -5,3 +5,4 @@ fluksotableau-c82e05375a0b.json
 notebooks/
 data/
 *.csv
+.idea/*

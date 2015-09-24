@@ -19,6 +19,7 @@ configuration properties.
 from ConfigParser import SafeConfigParser
 import inspect
 import os, sys
+import datetime as dt
 
 class Config(SafeConfigParser):
     """
@@ -43,3 +44,8 @@ class Config(SafeConfigParser):
         if configfile:
             configfiles.append(configfile)
         self.read(configfiles)
+
+def log(path, message, filename='log.txt'):
+    filename_full = os.path.join(path, filename)
+    with open(filename_full, 'a') as f:
+        f.write("{} - {}\n".format(dt.datetime.utcnow(), message))

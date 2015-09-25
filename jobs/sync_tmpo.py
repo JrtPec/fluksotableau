@@ -26,4 +26,4 @@ for f in fluksos:
             tmpos.sync(s.sensor_id)
         except:
             m = "sync failed for sensor {}".format(s.sensor_id)
-            config.log(path = c.get('data','logs'), message = m)
+            config.log(path = c.get('data','logs'), message = m, filename='sync')

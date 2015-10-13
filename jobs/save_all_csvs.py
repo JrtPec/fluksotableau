@@ -2,6 +2,7 @@ import os, inspect, sys, time
 import pandas as pd
 from dateutil import rrule
 import datetime as dt
+import filecmp
 
 script_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 sys.path.append(os.path.join(script_dir, os.pardir, os.pardir))

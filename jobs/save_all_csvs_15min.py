@@ -62,21 +62,22 @@ for i, f in enumerate(fluksos):
             print "success"
             ts = pd.concat([ts], axis=1)
             ts.columns = ['consumption']
-            ts['meterID'] = s.sensor_id
 
             ts = ts.resample('15min', how='mean')
+            ts['meterID'] = s.sensor_id
 
             for group in ts.groupby(ts.index.day):
                 filename = "15min.{}.{}.csv".format(s.sensor_id,group[1].first_valid_index().date())
+
                 #save file locally
-                group[1].to_csv('temp.csv')
+                group[1].to_csv('temp.csv', header=False)
 
                 if os.path.isfile(os.path.join(path_to_data,filename)) and (filecmp.cmp('temp.csv', os.path.join(path_to_data, filename))):
                     print "file already exists, not saving",
                     continue
                 else:
                     print "saving new file",
-                group[1].to_csv(os.path.join(path_to_data, filename))
+                group[1].to_csv(os.path.join(path_to_data, filename), header=False)
 
                 print ".",
             print "week done"

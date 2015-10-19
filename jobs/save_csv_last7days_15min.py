@@ -20,9 +20,9 @@ metadata = md.Metadata()
 fluksos = metadata.fluksos
 
 try:
-	tmpos = tmpo.Session(path = c.get('tmpo','path'))
+    tmpos = tmpo.Session(path = c.get('tmpo','path'))
 except:
-	tmpos = tmpo.Session()
+    tmpos = tmpo.Session()
 
 dl = datalayer.DataLayer(tmpos)
 
@@ -31,18 +31,18 @@ for f in fluksos:
         ts = dl.tmpo_dataframe([s.sensor_id], head = pd.Timestamp('now').normalize() - pd.Timedelta(days=7))
         if ts is None: continue
         ts.columns = ['consumption']
-        ts['meterID'] = s.sensor_id
 
         ts = ts.resample('15min', how='mean')
+        ts['meterID'] = s.sensor_id
 
         for group in ts.groupby(ts.index.day):
-        	filename = "15min.{}.{}.csv".format(s.sensor_id,group[1].first_valid_index().date())
-        	#save file locally
-        	group[1].to_csv('temp2.csv')
+            filename = "15min.{}.{}.csv".format(s.sensor_id,group[1].first_valid_index().date())
+            #save file locally
+            group[1].to_csv('temp2.csv', header=False)
 
-        	if os.path.isfile(os.path.join(path_to_data,filename)) and (filecmp.cmp('temp.csv', os.path.join(path_to_data, filename))):
-        		print "file already exists, not saving"
-        		continue
-        	else:
-        		print "saving new file"
-        	group[1].to_csv(os.path.join(path_to_data, filename))
+            if os.path.isfile(os.path.join(path_to_data,filename)) and (filecmp.cmp('temp2.csv', os.path.join(path_to_data, filename))):
+                print "file already exists, not saving"
+                continue
+            else:
+                print "saving new file"
+            group[1].to_csv(os.path.join(path_to_data, filename), header=False)
